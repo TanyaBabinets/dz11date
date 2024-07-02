@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Реализовать класс ExtendedDate, унаследовав его от стандартного класса Date и добавив следующие возможности:
+    • метод для вывода даты (числа и месяца) текстом;
+    • метод для проверки – это прошедшая дата или будущая (если прошедшая, то метод возвращает false; если будущая или
+    текущая, то - true);
+    • метод для проверки – високосный год или нет;
+    • метод, возвращающий следующую дату.
+    Создать объект класса ExtendedDate и вывести на экран результаты работы новых методов. -->
+    <style>
+           * {
+            margin: 0;
+            padding: 0
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            flex-direction: column;
+            text-align: center;
+            background-color: rgb(224, 192, 224);
+            font-size: 36px;
+        }
+
+        h2 {
+            color: darkblue;
+        }
+
+        input {
+            width: 180px;
+            height: 30px;
+            font-size: 18px;
+        }
+
+    button {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            color: darkblue;
+           font-size:22px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(135, 135, 172);
+        }
+        #result{
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Date</h2>
+    <div>
+        <label for="date">Please enter a date:</label><input type="text" id="date" name="date" placeholder="DD-MM-YYYY" /><br />
+
+    </div>
+    <div id="questions">
+        <button id="print">Print date</button><br />
+        <button id="future">Is it a future or past date?</button><br />
+        <button id="leap">Is it a leap year?</button><br />
+        <button id="next">Next date</button><br />
+        <button id="clear">Clear</button><br />
+    </div>
+    <input type="text" id="result" name="res" />
+    <script>
+        class ExtendedDate extends Date {
+            constructor(dateString) {
+                const [day, month, year] = dateString.split('-').map(Number);
+                super(year, month - 1, day);
+            }
+
+
+            showDate() {
+                const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const day = this.getDate();
+                const month = monthArray[this.getMonth()];
+                 const year = this.getFullYear();
+                return `${day} ${month} ${year}`;
+            }
+            isFutureDate() {
+                const thisDate = new Date();
+                return this >= thisDate;
+            }
+            isLeapYear() {
+                const year = this.getFullYear();
+                return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+            }
+            nextDay() {
+                const nextD = new Date(this);
+                nextD.setDate(this.getDate() + 1);
+                return nextD.toDateString();
+            }
+        }
+        function getInputDate() {
+            const myDate = document.getElementById('date').value;
+              if (!myDate) {
+                alert('Please enter a valid date in the format DD-MM-YYYY');
+                return null;
+            }
+            return new ExtendedDate(myDate);
+
+        }
+        document.getElementById('print').onclick = () => {
+            const date = getInputDate();
+              if (date) {
+                document.getElementById('result').value = date.showDate();
+            }
+            
+        }
+        document.getElementById('future').onclick = () => {
+            const date = getInputDate();
+            document.getElementById('result').value = date.isFutureDate() ? "Future Date" : "Past Date";
+        }
+        document.getElementById('leap').onclick = () => {
+            const date = getInputDate();
+            document.getElementById('result').value = date.isLeapYear() ? "Leap Year" : "Not a Leap Year";
+        }
+
+        document.getElementById('next').onclick = () => {
+            const date = getInputDate();
+            document.getElementById('result').value = date.nextDay();
+        }
+        document.getElementById('clear').onclick = () => {
+            document.getElementById('result').value = '';
+        }
+       
+    
+    </script>
+</body>
+
+</html>
